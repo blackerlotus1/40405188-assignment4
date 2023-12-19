@@ -1,0 +1,23 @@
+import numpy as np
+from scipy.linalg import solve_continuous_lyapunov
+import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
+
+
+A = np.array([[0.8, 0.6], [-0.7, 0.3]])
+Q = np.eye(2)  
+P = solve_continuous_lyapunov(A.T, -Q)
+print("Matrix P:")
+print(P)
+theta = np.linspace(0, 2 * np.pi, 100)
+ellipse = np.array([np.cos(theta), np.sin(theta)])
+inv_set = np.sqrt(np.diag(ellipse.T @ P @ ellipse))
+fig, ax = plt.subplots()
+ax.plot(inv_set[0], inv_set[1], label='Ellipsoidal Invariant Set', color='blue')
+ax.set_aspect('equal', 'box')
+ax.set_xlabel('x1')
+ax.set_ylabel('x2')
+ax.legend()
+plt.title('Ellipsoidal Invariant Set')
+plt.grid(True)
+plt.show()
